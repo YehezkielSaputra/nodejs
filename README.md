@@ -19,8 +19,8 @@
 | 13. |[What is a test pyramid?](#13-what-is-a-test-pyramid)|
 | 14. |[How can you secure your HTTP cookies against XSS attacks?](#14-how-can-you-secure-your-http-cookies-against-xss-attacks)|
 | 15. |[How can you make sure your dependencies are safe?](#15-how-can-you-make-sure-your-dependencies-are-safe)|
-| 16. |[What is Event loop in Node.js? And How does it work?](#16-what-is-event-loop-in-nodejs--and-how-does-it-work)|
-| 17. |[What is REPL? What purpose it is used for?](#17-what-is-repl--what-purpose-it-is-used-for)|
+| 16. |[What is Event loop in Node.js?](#16-what-is-event-loop-in-nodejs)|
+| 17. |[What is REPL?](#17-what-is-repl)|
 | 18. |[What is the difference between Asynchronous and Non-blocking?](#18-what-is-the-difference-between-asynchronous-and-non-blocking)|
 | 19. |[How to debug an application in Node.js?](#19-how-to-debug-an-application-in-nodejs)|
 | 20. |[What are some of the most popular modules of Node.js?](#20-what-are-some-of-the-most-popular-modules-of-nodejs)|
@@ -420,6 +420,194 @@ Example :
 Content-Security-Policy: default-src 'self' *.http://sometrustedwebsite.com
 ```
 
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 15. ***How can you make sure your dependencies are safe?***
+The only option is to automate the update / security audit of your dependencies. For that there are free and paid options:
+
+1. npm outdated
+2. Trace by RisingStack
+3. NSP
+4. GreenKeeper
+5. Snyk
+6. npm audit
+7. npm audit fix
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 16. ***What is Event loop in Node.js?***
+The event loop is what allows Node.js to perform non-blocking I/O operations — despite the fact that JavaScript is single-threaded — by offloading operations to the system kernel whenever possible.
+
+Node.js is a single-threaded application, but it can support concurrency via the concept of `event` and `callbacks`. Every API of Node.js is asynchronous and being single-threaded, they use `async function calls` to maintain concurrency. Node uses observer pattern. Node thread keeps an event loop and whenever a task gets completed, it fires the corresponding event which signals the event-listener function to execute.
+
+**Event-Driven Programming**  
+In an event-driven application, there is generally a main loop that listens for events, and then triggers a callback function when one of those events is detected.
+
+Although events look quite similar to callbacks, the difference lies in the fact that callback functions are called when an asynchronous function returns its result, whereas event handling works on the observer pattern. The functions that listen to events act as Observers. Whenever an event gets fired, its listener function starts executing. Node.js has multiple in-built events available through events module and EventEmitter class which are used to bind events and event-listeners as follows
+```javascript
+// Import events module
+var events = require('events');
+
+// Create an eventEmitter object
+var eventEmitter = new events.EventEmitter();
+```
+Example
+```javascript
+// Import events module
+var events = require('events');
+
+// Create an eventEmitter object
+var eventEmitter = new events.EventEmitter();
+
+// Create an event handler as follows
+var connectHandler = function connected() {
+   console.log('connection succesful.');
+  
+   // Fire the data_received event 
+   eventEmitter.emit('data_received');
+}
+
+// Bind the connection event with the handler
+eventEmitter.on('connection', connectHandler);
+ 
+// Bind the data_received event with the anonymous function
+eventEmitter.on('data_received', function() {
+   console.log('data received succesfully.');
+});
+
+// Fire the connection event 
+eventEmitter.emit('connection');
+
+console.log("Program Ended.");
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 17. ***What is REPL?***
+REPL (READ, EVAL, PRINT, LOOP) is a computer environment similar to Shell (Unix/Linux) and command prompt. Node comes with the REPL environment when it is installed. System interacts with the user through outputs of commands/expressions used. It is useful in writing and debugging the codes. The work of REPL can be understood from its full form:
+
+* **Read**: It reads the inputs from users and parses it into JavaScript data structure. It is then stored to memory.
+* **Eval**: The parsed JavaScript data structure is evaluated for the results.
+* **Print**: The result is printed after the evaluation.
+* **Loop**: Loops the input command. To come out of NODE REPL, press ctrl+c twice
+
+Simple Expression
+```javascript
+$ node
+> 10 + 20
+30
+> 10 + ( 20 * 30 ) - 40
+570
+>
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 18. ***What is the difference between Asynchronous and Non-blocking?***
+* **Asynchronous**: The architecture of asynchronous explains that the message sent will not give the reply on immediate basis just like we send the mail but do not get the reply on an immediate basis. It does not have any dependency or order. Hence improving the system efficiency and performance. The server stores the information and when the action is done it will be notified.
+
+* **Non-Blocking**: Nonblocking immediately responses with whatever data available. Moreover, it does not block any execution and keeps on running as per the requests. If an answer could not be retrieved than in those cases API returns immediately with an error. Nonblocking is mostly used with I/O(input/output). Node.js is itself based on nonblocking I/O model. There are few ways of communication that a nonblocking I/O has completed. The callback function is to be called when the operation is completed. Nonblocking call uses the help of javascript which provides a callback function.
+
+* **Asynchronous VS Non-Blocking**  
+
+1) Asynchronous does not respond immediately, While Nonblocking responds immediately if the data is available and if not that simply returns an error.
+2) Asynchronous improves the efficiency by doing the task fast as the response might come later, meanwhile, can do complete other tasks. Nonblocking does not block any execution and if the data is available it retrieves the information quickly.
+3) Asynchronous is the opposite of synchronous while nonblocking I/O is the opposite of blocking. They both are fairly similar but they are also different as asynchronous is used with a broader range of operations while nonblocking is mostly used with I/O.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 19. ***How to debug an application in Node.js?***
+* **node-inspector**
+```
+npm install -g node-inspector
+```
+Run
+```
+node-debug app.js
+```
+
+* **Debugging**
+    * Debugger
+    * Node Inspector
+    * Visual Studio Code
+    * Cloud9
+    * Brackets
+
+* **Profiling**
+```
+1. node --prof ./app.js
+2. node --prof-process ./the-generated-log-file
+```
+* **Heapdumps**
+    * node-heapdump with Chrome Developer Tools
+
+* **Tracing**
+    * Interactive Stack Traces with TraceGL
+
+* **Logging**  
+Libraries that output debugging information
+    * Caterpillar
+    * Tracer
+    * scribbles
+
+Libraries that enhance stack trace information  
+* Longjohn
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 20. ***What are some of the most popular modules of Node.js?***
+* **Async**: Async is a utility module which provides straight-forward, powerful functions for working with asynchronous JavaScript.
+* **Browserify**: Browserify will recursively analyze all the require() calls in your app in order to build a bundle you can serve up to the browser in a single <script> tag.
+* **Bower**: Bower is a package manager for the web. It works by fetching and installing packages from all over, taking care of hunting, finding, downloading, and saving the stuff you’re looking for.
+* **Backbone**: Backbone.js gives structure to web applications by providing models with key-value binding and custom events, collections with a rich API of enumerable functions, views with declarative event handling, and connects it all to your existing API over a RESTful JSON interface.
+* **Csv**: csv module has four sub modules which provides CSV generation, parsing, transformation and serialization for Node.js.
+* **Debug**: Debug is a tiny node.js debugging utility modelled after node core's debugging technique.
+* **Express**: Express is a fast, un-opinionated, minimalist web framework. It provides small, robust tooling for HTTP servers, making it a great solution for single page applications, web sites, hybrids, or public HTTP APIs.
+* **Forever**: A simple CLI tool for ensuring that a given node script runs continuously (i.e. forever).
+* **Grunt**: is a JavaScript Task Runner that facilitates creating new projects and makes performing repetitive but necessary tasks such as linting, unit testing, concatenating and minifying files (among other things) trivial.
+* **Gulp**: is a streaming build system that helps you automate painful or time-consuming tasks in your development workflow.
+* **Hapi**: is a streaming build system that helps you automate painful or time-consuming tasks in your development workflow.
+* **Http-server**: is a simple, zero-configuration command-line http server. It is powerful enough for production usage, but it's simple and hackable enough to be used for testing, local development, and learning.
+* **Inquirer**: A collection of common interactive command line user interfaces.
+* **Jquery**: jQuery is a fast, small, and feature-rich JavaScript library.
+* **Jshint**: Static analysis tool to detect errors and potential problems in JavaScript code and to enforce your team's coding conventions.
+* **Koa**: Koa is web app framework. It is an expressive HTTP middleware for node.js to make web applications and APIs more enjoyable to write.
+* **Lodash**: The lodash library exported as a node module. Lodash is a modern JavaScript utility library delivering modularity, performance, & extras.
+* **Less**: The less library exported as a node module.
+* **Moment**: A lightweight JavaScript date library for parsing, validating, manipulating, and formatting dates.
+* **Mongoose**: It is a MongoDB object modeling tool designed to work in an asynchronous environment.
+* **MongoDB**: The official MongoDB driver for Node.js. It provides a high-level API on top of mongodb-core that is meant for end users.
+* **Npm**: is package manager for javascript.
+* **Nodemon**: It is a simple monitor script for use during development of a node.js app, It will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application.
+* **Nodemailer**: This module enables e-mail sending from a Node.js applications.
+* **Optimist**: is a node.js library for option parsing with an argv hash.
+* **Phantomjs**: An NPM installer for PhantomJS, headless webkit with JS API. It has fast and native support for various web standards: DOM handling, CSS selector, JSON, Canvas, and SVG.
+* **Passport**: A simple, unobtrusive authentication middleware for Node.js. Passport uses the strategies to authenticate requests. Strategies can range from verifying username and password credentials or authentication using OAuth or OpenID.
+* **Q**: Q is a library for promises. A promise is an object that represents the return value or the thrown exception that the function may eventually provide.
+* **Request**: Request is Simplified HTTP request client make it possible to make http calls. It supports HTTPS and follows redirects by default.
+* **Socket.io**: Its a node.js realtime framework server.
+* **Sails**: Sails : API-driven framework for building realtime apps, using MVC conventions (based on Express and Socket.io)
+* **Through**: It enables simplified stream construction. It is easy way to create a stream that is both readable and writable.
+* **Underscore**: Underscore.js is a utility-belt library for JavaScript that provides support for the usual functional suspects (each, map, reduce, filter...) without extending any core JavaScript objects.
+* **Validator**: A nodejs module for a library of string validators and sanitizers.
+* **Winston**: A multi-transport async logging library for Node.js
+* **Ws**: A simple to use, blazing fast and thoroughly tested websocket client, server and console for node.js
+* **Xml2js**: A Simple XML to JavaScript object converter.
+* **Yo**: A CLI tool for running Yeoman generators
+* **Zmq**: Bindings for node.js and io.js to ZeroMQ .It is a high-performance asynchronous messaging library, aimed at use in distributed or concurrent applications.
+	
 <div align="right">
     <b><a href="#">back to top</a></b>
 </div>
