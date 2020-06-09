@@ -34,6 +34,16 @@
 | 28. |[What is the preferred method of resolving unhandled exceptions in Node.js?](#28-what-is-the-preferred-method-of-resolving-unhandled-exceptions-in-nodejs)|
 | 29. |[How does Node.js support multi-processor platforms?](#29-how-does-nodejs-support-multi-processor-platforms)|
 | 30. |[What is typically the first argument passed to a Node.js callback handler?](#30-what-is-typically-the-first-argument-passed-to-a-nodejs-callback-handler)|
+| 31. |[How Node.js read the content of a file?](#31-how-nodejs-read-the-content-of-a-file)|
+| 32. |[What is JIT and how is it related to Node.js?](#32-what-is-jit-and-how-is-it-related-to-nodejs)|
+| 33. |[What is difference between put and patch?](#33-what-is-difference-between-put-and-patch)|
+| 34. |[List types of Http requests supported by Node.js.](#34-list-types-of-http-requests-supported-by-nodejs)
+| 35. |[Why to use Express.js?](#35-why-to-use-expressjs)|
+| 36. |[Write the steps for setting up an Express JS application.](#36-write-the-steps-for-setting-up-an-express-js-application)
+| 37. |[Since node is a single threaded process how to make use of all CPUs?](#37-since-node-is-a-single-threaded-process-how-to-make-use-of-all-cpus)|
+| 38. |[What does emitter do and what is dispatcher?](#38-what-does-emitter-do-and-what-is-dispatcher)|
+| 39. |[How to kill child processes that spawn their own child processes in Node.js?](#39-how-to-kill-child-processes-that-spawn-their-own-child-processes-in-nodejs)|
+| 40. |[What do you understand by Reactor Pattern in Node.js?](#40-what-do-you-understand-by-reactor-pattern-in-nodejs)|
 
 #### 01. ***What is Node.js?***
 Node.js is an open-source server side runtime environment built on Chrome's V8 JavaScript engine. It provides an event driven, non-blocking (asynchronous) I/O and cross-platform runtime environment for building highly scalable server-side applications using JavaScript. 
@@ -1032,6 +1042,437 @@ function callback(err, results) {
     // no error, perform standard callback handling
 }
 ```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 31. ***How Node.js read the content of a file?***
+The "normal" way in Node.js is probably to read in the content of a file in a non-blocking, asynchronous way. That is, to tell Node to read in the file, and then to get a callback when the file-reading has been finished. That would allow us to hand several requests in parallel.
+
+Common use for the File System module:
+* Read files
+* Create files
+* Update files
+* Delete files
+* Rename files  
+
+**Read Files**  
+index.html
+```html
+<html>
+<body>
+  <h1>My Header</h1>
+  <p>My paragraph.</p>
+</body>
+</html>
+```
+read_file.js
+```javascript
+var http = require('http');
+var fs = require('fs');
+http.createServer(function (req, res) {
+  fs.readFile('index.html', function(err, data) {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.write(data);
+    res.end();
+  });
+}).listen(8080);
+```
+Initiate read_file.js:
+```
+C:\>node read_file.js
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 32. ***What is JIT and how is it related to Node.js?*** 
+Node.js has depended on the V8 JavaScript engine to provide code execution in the language. The V8 is a JavaScript engine built at the google development center, in Germany. It is open source and written in C++. It is used for both client side (Google Chrome) and server side (node.js) JavaScript applications. A central piece of the V8 engine that allows it to execute JavaScript at high speed is the JIT (Just In Time) compiler. This is a dynamic compiler that can optimize code during runtime. When V8 was first built the JIT Compiler was dubbed FullCodegen. Then, the V8 team implemented Crankshaft, which included many performance optimizations that FullCodegen did not implement.
+
+The `V8` was first designed to increase the performance of the JavaScript execution inside web browsers. In order to obtain speed, V8 translates JavaScript code into more efficient machine code instead of using an interpreter. It compiles JavaScript code into machine code at execution by implementing a JIT (Just-In-Time) compiler like a lot of modern JavaScript engines such as SpiderMonkey or Rhino (Mozilla) are doing. The main difference with V8 is that it doesn’t produce bytecode or any intermediate code.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 33. ***What is difference between put and patch?***
+PUT and PATCH are HTTP verbs and they both relate to updating a resource. The main difference between PUT and PATCH requests are in the way the server processes the enclosed entity to modify the resource identified by the Request-URI.
+
+In a PUT request, the enclosed entity is considered to be a modified version of the resource stored on the origin server, and the client is requesting that the stored version be replaced.
+
+With PATCH, however, the enclosed entity contains a set of instructions describing how a resource currently residing on the origin server should be modified to produce a new version.
+
+Also, another difference is that when you want to update a resource with PUT request, you have to send the full payload as the request whereas with PATCH, you only send the parameters which you want to update.
+
+The most commonly used HTTP verbs POST, GET, PUT, DELETE are similar to CRUD (Create, Read, Update and Delete) operations in database. We specify these HTTP verbs in the capital case. So, the below is the comparison between them.
+
+create - POST
+read - GET
+update - PUT
+delete - DELETE
+
+**PATCH**: Submits a partial modification to a resource. If you only need to update one field for the resource, you may want to use the PATCH method.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 34. ***List types of Http requests supported by Node.js?***
+The HTTP core module is a key module to Node.js networking.
+```javascript
+const http = require('http')
+```
+**http.METHODS**  
+```javascript
+require('http').METHODS
+[ 'ACL',
+  'BIND',
+  'CHECKOUT',
+  'CONNECT',
+  'COPY',
+  'DELETE',
+  'GET',
+  'HEAD',
+  'LINK',
+  'LOCK',
+  'M-SEARCH',
+  'MERGE',
+  'MKACTIVITY',
+  'MKCALENDAR',
+  'MKCOL',
+  'MOVE',
+  'NOTIFY',
+  'OPTIONS',
+  'PATCH',
+  'POST',
+  'PROPFIND',
+  'PROPPATCH',
+  'PURGE',
+  'PUT',
+  'REBIND',
+  'REPORT',
+  'SEARCH',
+  'SUBSCRIBE',
+  'TRACE',
+  'UNBIND',
+  'UNLINK',
+  'UNLOCK',
+  'UNSUBSCRIBE' ]
+  ```
+  **http.STATUS_CODES**  
+  ```javascript
+  require('http').STATUS_CODES
+{ '100': 'Continue',
+  '101': 'Switching Protocols',
+  '102': 'Processing',
+  '200': 'OK',
+  '201': 'Created',
+  '202': 'Accepted',
+  '203': 'Non-Authoritative Information',
+  '204': 'No Content',
+  '205': 'Reset Content',
+  '206': 'Partial Content',
+  '207': 'Multi-Status',
+  '208': 'Already Reported',
+  '226': 'IM Used',
+  '300': 'Multiple Choices',
+  '301': 'Moved Permanently',
+  '302': 'Found',
+  '303': 'See Other',
+  '304': 'Not Modified',
+  '305': 'Use Proxy',
+  '307': 'Temporary Redirect',
+  '308': 'Permanent Redirect',
+  '400': 'Bad Request',
+  '401': 'Unauthorized',
+  '402': 'Payment Required',
+  '403': 'Forbidden',
+  '404': 'Not Found',
+  '405': 'Method Not Allowed',
+  '406': 'Not Acceptable',
+  '407': 'Proxy Authentication Required',
+  '408': 'Request Timeout',
+  '409': 'Conflict',
+  '410': 'Gone',
+  '411': 'Length Required',
+  '412': 'Precondition Failed',
+  '413': 'Payload Too Large',
+  '414': 'URI Too Long',
+  '415': 'Unsupported Media Type',
+  '416': 'Range Not Satisfiable',
+  '417': 'Expectation Failed',
+  '418': 'I\'m a teapot',
+  '421': 'Misdirected Request',
+  '422': 'Unprocessable Entity',
+  '423': 'Locked',
+  '424': 'Failed Dependency',
+  '425': 'Unordered Collection',
+  '426': 'Upgrade Required',
+  '428': 'Precondition Required',
+  '429': 'Too Many Requests',
+  '431': 'Request Header Fields Too Large',
+  '451': 'Unavailable For Legal Reasons',
+  '500': 'Internal Server Error',
+  '501': 'Not Implemented',
+  '502': 'Bad Gateway',
+  '503': 'Service Unavailable',
+  '504': 'Gateway Timeout',
+  '505': 'HTTP Version Not Supported',
+  '506': 'Variant Also Negotiates',
+  '507': 'Insufficient Storage',
+  '508': 'Loop Detected',
+  '509': 'Bandwidth Limit Exceeded',
+  '510': 'Not Extended',
+  '511': 'Network Authentication Required' }
+  ```
+**Making HTTP Requests**  
+```javascript
+const request = require('request');
+
+request('https://nodejs.org/', function(err, res, body) {
+    console.log(body);
+});
+```
+The first argument to request can either be a URL string, or an object of options. Here are some of the more common options you'll encounter in your applications:
+
+* **url**: The destination URL of the HTTP request
+* **method**: The HTTP method to be used (GET, POST, DELETE, etc)
+* **headers**: An object of HTTP headers (key-value) to be set in the request
+* **form**: An object containing key-value form data
+```javascript
+const request = require('request');
+
+const options = {
+    url: 'https://nodejs.org/file.json',
+    method: 'GET',
+    headers: {
+        'Accept': 'application/json',
+        'Accept-Charset': 'utf-8',
+        'User-Agent': 'my-reddit-client'
+    }
+};
+
+request(options, function(err, res, body) {
+    let json = JSON.parse(body);
+    console.log(json);
+});
+```
+Using the options object, this request uses the GET method to retrieve JSON data directly from Reddit, which is returned as a string in the body field. From here, you can use `JSON.parse` and use the data as a normal JavaScript object.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 35. ***Why to use Express.js?***
+ExpressJS is a prebuilt NodeJS framework that can help you in creating server-side web applications faster and smarter. Simplicity, minimalism, flexibility, scalability are some of its characteristics and since it is made in NodeJS itself, it inherited its performance as well.
+
+Express 3.x is a light-weight web application framework to help organize your web application into an MVC architecture on the server side. You can then use a database like `MongoDB` with `Mongoose` (for modeling) to provide a backend for your Node.js application. Express.js basically helps you manage everything, from routes, to handling requests and views.
+
+It has become the standard server framework for node.js. Express is the backend part of something known as the MEAN stack. The MEAN is a free and open-source JavaScript software stack for building dynamic web sites and web applications which has the following components;
+
+1. **MongoDB** - The standard NoSQL database
+2. **Express.js** - The default web applications framework
+3. **Angular.js** - The JavaScript MVC framework used for web applications
+4. **Node.js** - Framework used for scalable server-side and networking applications.
+
+The Express.js framework makes it very easy to develop an application which can be used to handle multiple types of requests like the GET, PUT, and POST and DELETE requests.
+
+**using Express**  
+```javascript
+var express=require('express');
+var app=express();
+app.get('/',function(req,res) {
+  res.send('Hello World!');
+});
+var server=app.listen(3000,function() {});
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 36. ***Write the steps for setting up an Express JS application?***
+**Install Express Generator**  
+```
+C:\node>npm install -g express-generator
+```
+**Create an Express Project**  
+```
+C:\node>express --view="ejs" nodetest1
+```
+**Edit Dependencies**  
+MAKE SURE TO CD INTO YOUR nodetest FOLDER. OK, now we have some basic structure in there, but we're not quite done. You'll note that the express-generator routine created a file called package.json in your nodetest1 directory. Open this up in a text editor and it'll look like this:
+```javascript
+// C:\node\nodetest1\package.json
+{
+  "name": "nodetest1",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "ejs": "~2.5.7",
+    "express": "~4.16.0",
+    "http-errors": "~1.6.2",
+    "morgan": "~1.9.0"
+  }
+}
+```
+This is a basic JSON file describing our app and its dependencies. We need to add a few things to it. Specifically, calls for MongoDB and Monk. 
+```
+C:\node\nodetest1>npm install --save monk@^6.0.6 mongodb@^3.1.13
+```
+**Install Dependencies**  
+```
+C:\node\nodetest1>npm install
+C:\node\nodetest1>npm start
+```
+Node Console
+```
+> nodetest1@0.0.0 start C:\node\nodetest1
+> node ./bin/www
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 37. ***Since node is a single threaded process how to make use of all CPUs?***
+Node.js is a single threaded language which in background uses multiple threads to execute asynchronous code.
+Node.js is non-blocking which means that all functions ( callbacks ) are delegated to the event loop and they are ( or can be ) executed by different threads. That is handled by Node.js run-time.
+
+* Node.js does support forking multiple processes ( which are executed on different cores ).
+* It is important to know that state is not shared between master and forked process.
+* We can pass messages to forked process ( which is different script ) and to master process from forked process with function send.
+
+A single instance of Node.js runs in a single thread. To take advantage of multi-core systems, the user will sometimes want to launch a cluster of Node.js processes to handle the load. The cluster module allows easy creation of child processes that all share server ports.
+```javascript
+const cluster = require('cluster');
+const http = require('http');
+const numCPUs = require('os').cpus().length;
+
+if (cluster.isMaster) {
+  console.log(`Master ${process.pid} is running`);
+
+  // Fork workers.
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`worker ${worker.process.pid} died`);
+  });
+} else {
+  // Workers can share any TCP connection
+  // In this case it is an HTTP server
+  http.createServer((req, res) => {
+    res.writeHead(200);
+    res.end('hello world\n');
+  }).listen(8000);
+
+  console.log(`Worker ${process.pid} started`);
+}
+```
+Running Node.js will now share port 8000 between the workers:
+```
+$ node server.js
+Master 3596 is running
+Worker 4324 started
+Worker 4520 started
+Worker 6056 started
+Worker 5644 started
+```
+The worker processes are spawned using the `child_process.fork()` method, so that they can communicate with the parent via IPC and pass server handles back and forth.
+
+The cluster module supports two methods of distributing incoming connections.
+
+The first one (and the default one on all platforms except Windows), is the round-robin approach, where the master process listens on a port, accepts new connections and distributes them across the workers in a round-robin fashion, with some built-in smarts to avoid overloading a worker process.
+
+The second approach is where the master process creates the listen socket and sends it to interested workers. The workers then accept incoming connections directly.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 38. ***What does emitter do and what is dispatcher?***
+Node.js core API is based on asynchronous event-driven architecture in which certain kind of objects called emitters periodically emit events that cause listener objects to be called.
+
+All objects that emit events are members of EventEmitter class. These objects expose an eventEmitter.on() function that allows one or more functions to be attached to named events emitted by the object.
+
+When the EventEmitter object emits an event, all of the functions attached to that specific event are called synchronously. All values returned by the called listeners are ignored and will be discarded.
+```javascript
+const EventEmitter = require('events');
+class MyEmitter extends EventEmitter {}
+const myEmitter = new MyEmitter();
+myEmitter.on('event', function(a, b) {
+  console.log(a, b, this);
+  // Prints:
+  //   Technoetics Club MyEmitter {
+  //     domain: null,
+  //     _events: { event: [Function] },
+  //     _eventsCount: 1,
+  //     _maxListeners: undefined }
+});
+myEmitter.emit('event','Technoetics', 'Club');
+```
+Here we create a myEmitter object and emit event at the end which triggers the callback function and we are able to get the desired output.
+
+By default, all listeners attached to a particular event object are called by the EventListener object synchronously in the order in which they are registered or attached to the event object.
+
+**Dispatcher**  
+The Dispatcher has functionality not provided nor expected in EventEmitter, the most notable being waitFor, which allows a store to ensure that another store has been updated in response to an action before it proceeds.
+
+Pattern-wise, the Dispatcher is also a singleton, whereas EventEmitter is an API that you might object-assign onto multiple stores.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 39. ***How to kill child processes that spawn their own child processes in Node.js?***
+If a child process in Node.js spawn their own child processes, kill() method will not kill the child process’s own child processes. For example, if I start a process that starts it’s own child processes via child_process module, killing that child process will not make my program to quit.
+```javascript
+var spawn = require('child_process').spawn;
+var child = spawn('my-command');
+
+child.kill();
+```
+The program above will not quit if `my-command` spins up some more processes.
+**PID range hack**  
+We can start child processes with {detached: true} option so those processes will not be attached to main process but they will go to a new group of processes. Then using process.kill(-pid) method on main process we can kill all processes that are in the same group of a child process with the same pid group. In my case, I only have one processes in this group.
+```javascript
+var spawn = require('child_process').spawn;
+var child = spawn('my-command', {detached: true});
+
+process.kill(-child.pid);
+```
+Please note - before pid. This converts a pid to a group of pids for process kill() method.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 40. ***What do you understand by Reactor Pattern in Node.js?***
+Reactor Pattern is an idea of non-blocking I/O operations in Node.js. This pattern provides a handler(in case of Node.js, a callback function) that is associated with each I/O operation. When an I/O request is generated, it is submitted to a demultiplexer.
+
+This demultiplexer is a notification interface that is used to handle concurrency in non-blocking I/O mode and collects every request in form of an event and queues each event in a queue. Thus, the demultiplexer provides the Event Queue, which we often hear. When a request is collected by the demultiplexer, it returns the control back to the system and does not blocks the I/O. At the same time, there is an Event Loop which iterates over the items in the Event Queue. Every event has a callback function associated with it, and that callback function is invoked when the Event Loop iterates.
+
+The callback function further mostly have other callbacks associated within representing some asynchronous operations. These operations are inserted in the Event Queue by the demultiplexer and are ready to be processed once the Event Loop iterates over them. That is why calls to other operations must be asynchronous.
+
+When all the items in the Event Queue are processed and there are no pending operations left, Node.js terminates the application automatically.
+
+![alt text](# "Test Pyramid")
+
+1. The application generates a new I/O operation by submitting a request to the Event Demultiplexer. The application also specifies a handler, which will be invoked when the operation completes. Submitting a new request to the Event Demultiplexer is a non-blocking call and it immediately returns the control back to the application.
+2. When a set of I/O operations completes, the Event Demultiplexer pushes the new events into the Event Queue.
+3. At this point, the Event Loop iterates over the items of the Event Queue.
+4. For each event, the associated handler is invoked.
+5. The handler, which is part of the application code, will give back the control to the Event Loop when its execution completes (5a). However, new asynchronous operations might be requested during the execution of the handler (5b), causing new operations to be inserted in the Event Demultiplexer (1), before the control is given back to the Event Loop.
+6. When all the items in the Event Queue are processed, the loop will block again on the Event Demultiplexer which will then trigger another cycle.
 
 <div align="right">
     <b><a href="#">back to top</a></b>
