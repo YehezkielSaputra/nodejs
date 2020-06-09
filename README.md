@@ -16,14 +16,14 @@
 | 10. |[When should you npm and when yarn?](#10-when-should-you-npm-and-when-yarn)|
 | 11. |[What does the runtime environment mean in Node.js?](#11-what-does-the-runtime-environment-mean-in-nodejs)|
 | 12. |[What is a stub?](#12-what-is-a-stub)|
-| 13. |[What is a test pyramid? How can you implement it when talking about HTTP APIs?](#13-what-is-a-test-pyramid--how-can-you-implement-it-when-talking-about-http-apis)|
+| 13. |[What is a test pyramid?](#13-what-is-a-test-pyramid)|
 | 14. |[How can you secure your HTTP cookies against XSS attacks?](#14-how-can-you-secure-your-http-cookies-against-xss-attacks)|
 | 15. |[How can you make sure your dependencies are safe?](#15-how-can-you-make-sure-your-dependencies-are-safe)|
 | 16. |[What is Event loop in Node.js? And How does it work?](#16-what-is-event-loop-in-nodejs--and-how-does-it-work)|
 | 17. |[What is REPL? What purpose it is used for?](#17-what-is-repl--what-purpose-it-is-used-for)|
 | 18. |[What is the difference between Asynchronous and Non-blocking?](#18-what-is-the-difference-between-asynchronous-and-non-blocking)|
 | 19. |[How to debug an application in Node.js?](#19-how-to-debug-an-application-in-nodejs)|
-| 20. |[What are some of the most popular modules of Node.js?](#20 -what-are-some-of-the-most-popular-modules-of-nodejs)|
+| 20. |[What are some of the most popular modules of Node.js?](#20-what-are-some-of-the-most-popular-modules-of-nodejs)|
 
 #### 01. ***What is Node.js?***
 Node.js is an open-source server side runtime environment built on Chrome's V8 JavaScript engine. It provides an event driven, non-blocking (asynchronous) I/O and cross-platform runtime environment for building highly scalable server-side applications using JavaScript. 
@@ -374,7 +374,7 @@ readFileStub.restore();
     <b><a href="#">back to top</a></b>
 </div>
 
-#### 13. ***What is a test pyramid? How can you implement it when talking about HTTP APIs?***
+#### 13. ***What is a test pyramid?***
 The "Test Pyramid" is a metaphor that tells us to group software tests into buckets of different granularity. It also gives an idea of how many tests we should have in each of these groups. It shows which kinds of tests you should be looking for in the different levels of the pyramid and gives practical examples on how these can be implemented.
 
 ![alt text](https://github.com/learning-zone/nodejs-interview-questions/blob/master/assets/testPyramid.png "Test Pyramid")
