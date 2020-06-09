@@ -14,6 +14,16 @@
 | 08. |[What are Promises in Node.js?](#08-what-are-promises-in-nodejs)|
 | 09. |[What tools can be used to assure consistent style?](#09-what-tools-can-be-used-to-assure-consistent-style)|
 | 10. |[When should you npm and when yarn?](#10-when-should-you-npm-and-when-yarn)|
+| 11. |[What does the runtime environment mean in Node.js?](#11-what-does-the-runtime-environment-mean-in-nodejs)|
+| 12. |[What is a stub?](#12-what-is-a-stub)|
+| 13. |[What is a test pyramid? How can you implement it when talking about HTTP APIs?](#13-what-is-a-test-pyramid--how-can-you-implement-it-when-talking-about-http-apis)|
+| 14. |[How can you secure your HTTP cookies against XSS attacks?](#14-how-can-you-secure-your-http-cookies-against-xss-attacks)|
+| 15. |[How can you make sure your dependencies are safe?](#15-how-can-you-make-sure-your-dependencies-are-safe)|
+| 16. |[What is Event loop in Node.js? And How does it work?](#16-what-is-event-loop-in-nodejs--and-how-does-it-work)|
+| 17. |[What is REPL? What purpose it is used for?](#17-what-is-repl--what-purpose-it-is-used-for)|
+| 18. |[What is the difference between Asynchronous and Non-blocking?](#18-what-is-the-difference-between-asynchronous-and-non-blocking)|
+| 19. |[How to debug an application in Node.js?](#19-how-to-debug-an-application-in-nodejs)|
+| 20. |[What are some of the most popular modules of Node.js?](#20 -what-are-some-of-the-most-popular-modules-of-nodejs)|
 
 #### 01. ***What is Node.js?***
 Node.js is an open-source server side runtime environment built on Chrome's V8 JavaScript engine. It provides an event driven, non-blocking (asynchronous) I/O and cross-platform runtime environment for building highly scalable server-side applications using JavaScript. 
@@ -317,6 +327,98 @@ npm install yarn --global
 * Multiple Registries: Install any package from either npm or Bower and keep your package workflow the same.
 * Network Resilience: A single request failing won't cause an install to fail. Requests are retried upon failure.
 * Flat Mode: Resolve mismatching versions of dependencies to a single version to avoid creating duplicates.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 11. ***What does the runtime environment mean in Node.js?***
+The Node.js runtime is the software stack responsible for installing your web service's code and its dependencies and running your service.
+
+The Node.js runtime for App Engine in the standard environment is declared in the `app.yaml` file:
+```javascript
+runtime: nodejs10
+```
+
+The runtime environment is literally just the environment your application is running in. This can be used to describe both the hardware and the software that is running your application. How much RAM, what version of node, what operating system, how much CPU cores, can all be referenced when talking about a runtime environment.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 12. ***What is a stub?*** 
+Stubbing and verification for node.js tests. Enables you to validate and override behaviour of nested pieces of code such as methods, require() and npm modules or even instances of classes. This library is inspired on node-gently, MockJS and mock-require.  
+
+**Features of Stub:**  
+
+* Produces simple, lightweight Objects capable of extending down their tree
+* Compatible with Nodejs
+* Easily extendable directly or through an ExtensionManager
+* Comes with predefined, usable extensions
+
+Stubs are functions/programs that simulate the behaviours of components/modules. Stubs provide canned answers to function calls made during test cases. Also, you can assert on with what these stubs were called.
+
+A use-case can be a file read, when you do not want to read an actual file:
+```javascript
+var fs = require('fs');
+
+var readFileStub = sinon.stub(fs, 'readFile', function (path, cb) {  
+  return cb(null, 'filecontent');
+});
+
+expect(readFileStub).to.be.called;  
+readFileStub.restore();
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 13. ***What is a test pyramid? How can you implement it when talking about HTTP APIs?***
+The "Test Pyramid" is a metaphor that tells us to group software tests into buckets of different granularity. It also gives an idea of how many tests we should have in each of these groups. It shows which kinds of tests you should be looking for in the different levels of the pyramid and gives practical examples on how these can be implemented.
+
+![alt text](https://github.com/learning-zone/nodejs-interview-questions/blob/master/assets/testPyramid.png "Test Pyramid")
+
+
+Mike Cohn's original test pyramid consists of three layers that your test suite should consist of (bottom to top):
+
+1. Unit Tests
+1. Service Tests
+1. User Interface Tests
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 14. ***How can you secure your HTTP cookies against XSS attacks?***
+
+1. When the web server sets cookies, it can provide some additional attributes to make sure the cookies won't be accessible by using malicious JavaScript. One such attribute is HttpOnly.
+
+Example :
+```javascript
+Set-Cookie: [name]=[value]; HttpOnly
+```
+
+HttpOnly makes sure the cookies will be submitted only to the domain they originated from.
+
+2. The "Secure" attribute can make sure the cookies are sent over secured channel only.
+
+Example :
+```javascript
+Set-Cookie: [name]=[value]; Secure
+```
+3. The web server can use X-XSS-Protection response header to make sure pages do not load when they detect reflected cross-site scripting (XSS) attacks.
+
+Example :
+```javascript
+X-XSS-Protection: 1; mode=block
+```
+4. The web server can use HTTP Content-Security-Policy response header to control what resources a user agent is allowed to load for a certain page. It can help to prevent various types of attacks like Cross Site Scripting (XSS) and data injection attacks.
+
+Example :
+```javascript
+Content-Security-Policy: default-src 'self' *.http://sometrustedwebsite.com
+```
 
 <div align="right">
     <b><a href="#">back to top</a></b>
