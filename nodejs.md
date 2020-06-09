@@ -24,6 +24,16 @@
 | 18. |[What is the difference between Asynchronous and Non-blocking?](#18-what-is-the-difference-between-asynchronous-and-non-blocking)|
 | 19. |[How to debug an application in Node.js?](#19-how-to-debug-an-application-in-nodejs)|
 | 20. |[What are some of the most popular modules of Node.js?](#20-what-are-some-of-the-most-popular-modules-of-nodejs)|
+| 21. |[What is EventEmitter in Node.js?](#21-what-is-eventemitter-in-nodejs)|
+| 22. |[How many types of streams are present in node.js?](#22-how-many-types-of-streams-are-present-in-nodejs)|
+| 23. |[What is crypto in Node.js?](#23-what-is-crypto-in-nodejs)|
+| 24. |[What is the use of DNS module in Node.js?](#24-what-is-the-use-of-dns-module-in-nodejs)|
+| 25. |[What are the security mechanisms available in Node.js?](#25-what-are-the-security-mechanisms-available-in-nodejs)|
+| 26. |[Name the types of API functions in Node.js.](#26-name-the-types-of-api-functions-in-nodejs)
+| 27. |[How does Node.js handle child threads?](#27-how-does-nodejs-handle-child-threads)|
+| 28. |[What is the preferred method of resolving unhandled exceptions in Node.js?](#28-what-is-the-preferred-method-of-resolving-unhandled-exceptions-in-nodejs)|
+| 29. |[How does Node.js support multi-processor platforms?](#29-how-does-nodejs-support-multi-processor-platforms)|
+| 30. |[What is typically the first argument passed to a Node.js callback handler?](#30-what-is-typically-the-first-argument-passed-to-a-nodejs-callback-handler)|
 
 #### 01. ***What is Node.js?***
 Node.js is an open-source server side runtime environment built on Chrome's V8 JavaScript engine. It provides an event driven, non-blocking (asynchronous) I/O and cross-platform runtime environment for building highly scalable server-side applications using JavaScript. 
@@ -608,6 +618,421 @@ Libraries that enhance stack trace information
 * **Yo**: A CLI tool for running Yeoman generators
 * **Zmq**: Bindings for node.js and io.js to ZeroMQ .It is a high-performance asynchronous messaging library, aimed at use in distributed or concurrent applications.
 	
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 21. ***What is EventEmitter in Node.js?***
+All objects that emit events are members of EventEmitter class. These objects expose an `eventEmitter.on()` function that allows one or more functions to be attached to named events emitted by the object.
+
+When the EventEmitter object emits an event, all of the functions attached to that specific event are called synchronously. All values returned by the called listeners are ignored and will be discarded.
+Example
+```javascript
+var events = require('events');
+var eventEmitter = new events.EventEmitter();
+
+// listener #1
+var listner1 = function listner1() {
+   console.log('listner1 executed.');
+}
+
+// listener #2
+var listner2 = function listner2() {
+   console.log('listner2 executed.');
+}
+
+// Bind the connection event with the listner1 function
+eventEmitter.addListener('connection', listner1);
+
+// Bind the connection event with the listner2 function
+eventEmitter.on('connection', listner2);
+
+var eventListeners = require('events').EventEmitter.listenerCount
+   (eventEmitter,'connection');
+console.log(eventListeners + " Listner(s) listening to connection event");
+
+// Fire the connection event 
+eventEmitter.emit('connection');
+
+// Remove the binding of listner1 function
+eventEmitter.removeListener('connection', listner1);
+console.log("Listner1 will not listen now.");
+
+// Fire the connection event 
+eventEmitter.emit('connection');
+
+eventListeners = require('events').EventEmitter.listenerCount(eventEmitter,'connection');
+console.log(eventListeners + " Listner(s) listening to connection event");
+
+console.log("Program Ended.");
+```
+Now run the main.js 
+```
+$ node main.js
+```
+Output
+```
+2 Listner(s) listening to connection event
+listner1 executed.
+listner2 executed.
+Listner1 will not listen now.
+listner2 executed.
+1 Listner(s) listening to connection event
+Program Ended.
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 22. ***How many types of streams are present in node.js?***
+Streams are objects that let you read data from a source or write data to a destination in continuous fashion.
+There are four types of streams 
+* **Readable** − Stream which is used for read operation.
+* **Writable** − Stream which is used for write operation.
+* **Duplex** − Stream which can be used for both read and write operation.
+* **Transform** − A type of duplex stream where the output is computed based on input.  
+
+Each type of Stream is an EventEmitter instance and throws several events at different instance of times.  
+
+For example
+* **data** − This event is fired when there is data is available to read.
+* **end** − This event is fired when there is no more data to read.
+* **error** − This event is fired when there is any error receiving or writing data.
+* **finish** − This event is fired when all the data has been flushed to underlying system. 
+
+**Reading from a Stream**  
+```javascript
+var fs = require("fs");
+var data = '';
+
+// Create a readable stream
+var readerStream = fs.createReadStream('input.txt');
+
+// Set the encoding to be utf8. 
+readerStream.setEncoding('UTF8');
+
+// Handle stream events --> data, end, and error
+readerStream.on('data', function(chunk) {
+   data += chunk;
+});
+
+readerStream.on('end',function() {
+   console.log(data);
+});
+
+readerStream.on('error', function(err) {
+   console.log(err.stack);
+});
+
+console.log("Program Ended");
+```
+
+**Writing to a Stream**   
+```javascript
+var fs = require("fs");
+var data = 'Simply Easy Learning';
+
+// Create a writable stream
+var writerStream = fs.createWriteStream('output.txt');
+
+// Write the data to stream with encoding to be utf8
+writerStream.write(data,'UTF8');
+
+// Mark the end of file
+writerStream.end();
+
+// Handle stream events --> finish, and error
+writerStream.on('finish', function() {
+   console.log("Write completed.");
+});
+
+writerStream.on('error', function(err) {
+   console.log(err.stack);
+});
+
+console.log("Program Ended");
+```
+
+**Piping the Streams**  
+Piping is a mechanism where we provide the output of one stream as the input to another stream. It is normally used to get data from one stream and to pass the output of that stream to another stream. There is no limit on piping operations.
+
+```javascript
+var fs = require("fs");
+
+// Create a readable stream
+var readerStream = fs.createReadStream('input.txt');
+
+// Create a writable stream
+var writerStream = fs.createWriteStream('output.txt');
+
+// Pipe the read and write operations
+// read input.txt and write data to output.txt
+readerStream.pipe(writerStream);
+
+console.log("Program Ended");
+```
+
+**Chaining the Streams**   
+Chaining is a mechanism to connect the output of one stream to another stream and create a chain of multiple stream operations. It is normally used with piping operations.  
+```javascript
+var fs = require("fs");
+var zlib = require('zlib');
+
+// Compress the file input.txt to input.txt.gz
+fs.createReadStream('input.txt')
+   .pipe(zlib.createGzip())
+   .pipe(fs.createWriteStream('input.txt.gz'));
+  
+console.log("File Compressed.");
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 23. ***What is crypto in Node.js?***
+The Node.js Crypto module supports cryptography. It provides cryptographic functionality that includes a set of wrappers for open SSL's hash HMAC, cipher, decipher, sign and verify functions.
+
+* **Hash**: A hash is a fixed-length string of bits i.e. procedurally and deterministically generated from some arbitrary block of source data.
+* **HMAC**: HMAC stands for Hash-based Message Authentication Code. It is a process for applying a hash algorithm to both data and a secret key that results in a single final hash.
+
+* Encryption Example using Hash and HMAC
+```javascript
+const crypto = require('crypto');  
+const secret = 'abcdefg';  
+const hash = crypto.createHmac('sha256', secret)  
+                   .update('Welcome to JavaTpoint')  
+                   .digest('hex');  
+console.log(hash);  
+```
+* Encryption example using Cipher
+```javascript
+const crypto = require('crypto');  
+const cipher = crypto.createCipher('aes192', 'a password');  
+var encrypted = cipher.update('Hello JavaTpoint', 'utf8', 'hex');  
+encrypted += cipher.final('hex');  
+console.log(encrypted);   
+```
+* Decryption example using Decipher
+```javascript
+const crypto = require('crypto');  
+const decipher = crypto.createDecipher('aes192', 'a password');  
+var encrypted = '4ce3b761d58398aed30d5af898a0656a3174d9c7d7502e781e83cf6b9fb836d5';  
+var decrypted = decipher.update(encrypted, 'hex', 'utf8');  
+decrypted += decipher.final('utf8');  
+console.log(decrypted);  
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 24. ***What is the use of DNS module in Node.js?***
+DNS is a node module used to do name resolution facility which is provided by the operating system as well as used to do an actual DNS lookup. No need for memorising IP addresses – DNS servers provide a nifty solution of converting domain or subdomain names to IP addresses. This module provides an asynchronous network wrapper and can be imported using the following syntax.
+```javascript
+const dns = require('dns'); 
+```
+Example: `dns.lookup()` function  
+```javascript
+const dns = require('dns');  
+dns.lookup('www.google.com', (err, addresses, family) => {  
+  console.log('addresses:', addresses);  
+  console.log('family:',family);  
+});  
+```
+Example: `resolve4()` and `reverse()` functions
+```javascript
+const dns = require('dns');  
+dns.resolve4('www.google.com', (err, addresses) => {  
+  if (err) throw err;  
+  console.log(`addresses: ${JSON.stringify(addresses)}`);  
+  addresses.forEach((a) => {  
+    dns.reverse(a, (err, hostnames) => {  
+      if (err) {  
+        throw err;  
+      }  
+      console.log(`reverse for ${a}: ${JSON.stringify(hostnames)}`);  
+    });  
+  });  
+});   
+```
+Example: print the localhost name using `lookupService()` function
+```javascript
+const dns = require('dns');  
+dns.lookupService('127.0.0.1', 22, (err, hostname, service) => {  
+  console.log(hostname, service);  
+    // Prints: localhost  
+}); 
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 25. ***What are the security mechanisms available in Node.js?***
+* **Using the Helmet module**  
+Helmet helps to secure your Express applications by setting various HTTP headers, like:
+    * X-Frame-Options to mitigates clickjacking attacks,
+    * Strict-Transport-Security to keep your users on HTTPS,
+    * X-XSS-Protection to prevent reflected XSS attacks,
+    * X-DNS-Prefetch-Control to disable browsers’ DNS prefetching.
+```javascript
+const express = require('express')
+const helmet = require('helmet')
+const app = express()
+
+app.use(helmet())
+```
+* **Validating user input**    
+Validating user input is one of the most important things to do when it comes to the security of your application. Failing to do it correctly can open up your application and users to a wide range of attacks, including command injection, SQL injection or stored cross-site scripting.
+
+To validate user input, one of the best libraries you can pick is joi. Joi is an object schema description language and validator for JavaScript objects.
+```javascript
+const Joi = require('joi');
+
+const schema = Joi.object().keys({
+    username: Joi.string().alphanum().min(3).max(30).required(),
+    password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+    access_token: [Joi.string(), Joi.number()],
+    birthyear: Joi.number().integer().min(1900).max(2013),
+    email: Joi.string().email()
+}).with('username', 'birthyear').without('password', 'access_token')
+
+// Return result
+const result = Joi.validate({
+    username: 'abc',
+    birthyear: 1994
+}, schema)
+// result.error === null -> valid
+```
+* **Securing your Regular Expressions**    
+Regular Expressions are a great way to manipulate texts and get the parts that you need from them. However, there is an attack vector called Regular Expression Denial of Service attack, which exposes the fact that most Regular Expression implementations may reach extreme situations for specially crafted input, that cause them to work extremely slowly.
+
+The Regular Expressions that can do such a thing are commonly referred as Evil Regexes. These expressions contain:
+*grouping with repetition,
+*inside the repeated group:
+    *repetition, or
+    *alternation with overlapping  
+
+Examples of Evil Regular Expressions patterns:
+```
+(a+)+
+([a-zA-Z]+)*
+(a|aa)+
+```
+* **Security.txt**    
+Security.txt defines a standard to help organizations define the process for security researchers to securely disclose security vulnerabilities.
+```javascript
+const express = require('express')
+const securityTxt = require('express-security.txt')
+
+const app = express()
+
+app.get('/security.txt', securityTxt({
+  // your security address
+  contact: 'email@example.com',
+  // your pgp key
+  encryption: 'encryption',
+  // if you have a hall of fame for securty resourcers, include the link here
+  acknowledgements: 'http://acknowledgements.example.com'
+}))
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 26. ***Name the types of API functions in Node.js?***
+There are two types of API functions in Node.js:
+* Asynchronous, Non-blocking functions
+* Synchronous, Blocking functions
+
+* **Blocking functions** - In a blocking operation, all other code is blocked from executing until an I/O event that is being waited on occurs. Blocking functions execute synchronously.
+For example:
+```javascript
+const fs = require('fs');
+const data = fs.readFileSync('/file.md'); // blocks here until file is read
+console.log(data);
+// moreWork(); will run after console.log
+```
+The second line of code blocks the execution of additional JavaScript until the entire file is read. moreWork () will only be called after Console.log
+
+* **Non-blocking functions** - In a non-blocking operation, multiple I/O calls can be performed without the execution of the program being halted. Non-blocking functions execute asynchronously.
+For example:
+```javascript
+const fs = require('fs');
+fs.readFile('/file.md', (err, data) => {
+  if (err) throw err;
+  console.log(data);
+});
+// moreWork(); will run before console.log
+```
+Since `fs.readFile()` is non-blocking, moreWork() does not have to wait for the file read to complete before being called. This allows for higher throughput.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 27. ***How does Node.js handle child threads?***
+Node.js is a single threaded language which in background uses multiple threads to execute asynchronous code.
+Node.js is non-blocking which means that all functions ( callbacks ) are delegated to the event loop and they are ( or can be ) executed by different threads. That is handled by Node.js run-time.
+
+* Nodejs Primary application runs in an event loop, which is in a single thread.
+* Background I/O is running in a thread pool that is only accessible to C/C++ or other compiled/native modules and mostly transparent to the JS.
+* Node v11/12 now has experimental worker_threads, which is another option.
+* Node.js does support forking multiple processes ( which are executed on different cores ).
+* It is important to know that state is not shared between master and forked process.
+* We can pass messages to forked process ( which is different script ) and to master process from forked process with function send.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 28. ***What is the preferred method of resolving unhandled exceptions in Node.js?***
+Unhandled exceptions in Node.js can be caught at the Process level by attaching a handler for uncaughtException event.
+```javascript
+process.on('uncaughtException', function(err) {
+    console.log('Caught exception: ' + err);
+});
+```
+Process is a global object that provides information about the current Node.js process. Process is a listener function that is always listening to events.
+
+Few events are :
+1. Exit
+1. disconnect
+1. unhandledException
+1. rejectionHandled
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 29. ***How does Node.js support multi-processor platforms?***
+Since Node.js is by default a single thread application, it will run on a single processor core and will not take full advantage of multiple core resources. However, Node.js provides support for deployment on multiple-core systems, to take greater advantage of the hardware. The Cluster module is one of the core Node.js modules and it allows running multiple Node.js worker processes that will share the same port.
+
+The cluster module helps to spawn new processes on the operating system. Each process works independently, so you cannot use shared state between child processes. Each process communicates with the main process by IPC and pass server handles back and forth.
+
+Cluster supports two types of load distribution:
+* The main process listens on a port, accepts new connection and assigns it to a child process in a round robin fashion.
+* The main process assigns the port to a child process and child process itself listen the port.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 30. ***What is typically the first argument passed to a Node.js callback handler?***
+The first argument to any callback handler is an optional error object
+```javascript
+function callback(err, results) {
+    // usually we'll check for the error before handling results
+    if(err) {
+        // handle error somehow and return
+    }
+    // no error, perform standard callback handling
+}
+```
+
 <div align="right">
     <b><a href="#">back to top</a></b>
 </div>
