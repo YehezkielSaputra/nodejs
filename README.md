@@ -54,6 +54,20 @@
 | 48. |[Is Node.js entirely based on a single-thread?](#48-is-nodejs-entirely-based-on-a-single-thread)|
 | 49. |[How to make post request in Node.js?](#49-how-to-make-post-request-in-nodejs)|
 | 50. |[Can you create http server in Node.js?](#50-can-you-create-http-server-in-nodejs)|
+| 51. |[How to load html in Node.js?](#51-how-to-load-html-in-nodejs)|
+| 52. |[How can you listen on port 80 with Node?](#52-how-can-you-listen-on-port-80-with-node)|
+| 53. |[What is the difference between operational and programmer errors?](#53-what-is-the-difference-between-operational-and-programmer-errors)|
+| 54. |[Why npm shrinkwrap is useful?](#54-why-npm-shrinkwrap-is-useful)|
+| 55. |[What is your favourite HTTP framework and why?](#55-what-is-your-favourite-http-framework-and-why)|
+| 56. |[What are the Challenges with Node.js?](#56-what-are-the-challenges-with-nodejs)|
+| 57. |[What is the difference between Node.js vs Ajax?](#57-what-is-the-difference-between-nodejs-vs-ajax)|
+| 58. |[Mention the steps by which you can async in Node.js?](#58-mention-the-steps-by-which-you-can-async-in-nodejs)|
+| 59. |[What are the timing features of Node.js?](#59-what-are-the-timing-features-of-nodejs)|
+| 60. |[What is LTS releases of Node.js why should you care?](#60-what-is-lts-releases-of-nodejs-why-should-you-care)|
+| 61. |[Why should you separate Express app and server?](#61-why-should-you-separate-express-app-and-server)|
+| 62. |[What is difference between JavaScript and Node.js?](#62-what-is-difference-between-javascript-and-nodejs)|
+
+<br/>
 
 #### 01. ***What is Node.js?***
 Node.js is an open-source server side runtime environment built on Chrome's V8 JavaScript engine. It provides an event driven, non-blocking (asynchronous) I/O and cross-platform runtime environment for building highly scalable server-side applications using JavaScript. 
@@ -1663,6 +1677,236 @@ var requestListener = function (request, response) {
 }
 var server = http.createServer(requestListener);
 server.listen(4200); // The port where you want to start with.
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 51. ***How to load html in Node.js?***
+To load HTML in Node.js we have to change the “Content-type” in the HTML code from text/plain to text/html.
+Let’s see an example where we have created a static file in web server.
+```javascript
+fs.readFile(filename, "binary", function(err, file) {
+    if(err) { 
+        response.writeHead(500, {"Content-Type": "text/plain"});
+        response.write(err + "\n");
+        response.end();
+        return;
+    }
+
+response.writeHead(200);
+response.write(file, "binary");
+response.end();
+});
+```
+Now we will modify this code to load an HTML page instead of plain text.
+```javascript
+fs.readFile(filename, "binary", function(err, file) {
+    if(err) { 
+        response.writeHead(500, {"Content-Type": "text/html"});
+        response.write(err + "\n");
+        response.end();
+        return;
+    }
+
+response.writeHead(200, {"Content-Type": "text/html"});
+response.write(file);
+response.end();
+});
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 52. ***How can you listen on port 80 with Node?***
+Instead of running on port 80 we can redirect port 80 to your application's port (>1024) using
+```
+iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 3000
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 53. ***What is the difference between operational and programmer errors?***
+Operation errors are not bugs, but problems with the system, like request timeout or hardware failure. On the other hand programmer errors are actual bugs.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 54. ***Why npm shrinkwrap is useful?***
+NPM shrinkwrap lets you lock down the ver­sions of installed pack­ages and their descen­dant pack­ages. It helps you use same package versions on all environments (development, staging, production) and also improve download and installation speed. Having same versions of packages on all environments can help you test systems and deploy with confidence. If all tests pass on one machine, you can be sure that it will pass on all other because you know that you use same code!
+```
+npm shrinkwrap
+```
+It should create new npm-shrinkwrap.json file with information about all packages you use.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 55. ***What is your favourite HTTP framework and why?***
+**Express.js**: Express provides a thin layer on top of Node.js with web application features such as basic routing, middleware, template engine and static files serving, so the drastic I/O performance of Node.js doesn’t get compromised.
+
+Express is a minimal, un-opinionated framework. it doesn’t apply any of the prevalent design patterns such as MVC, MVP, MVVM or whatever is trending out of the box. For fans of simplicity, this is a big plus among all other frameworks because you can build your application with your own preference and no unnecessary learning curve. This is especially advantageous when creating a new personal project with no historical burden, but as the project or developing team grows, lack of standardization may lead to extra work for project/code management, and worst case scenario it may lead to the inability to maintain.  
+
+**Generator**  
+Even though the framework is un-opinionated, it does have the generator that generates specific project folder structure. After installing express-generator npm package and creating application skeleton with generator command, an application folder with clear hierarchy will be created to help you organize images, front-end static JavaScript, stylesheet files and HTML template files.
+```
+npm install express-generator -g
+express helloapp
+```
+**Middleware**  
+Middleware are basically just functions that have full access to both request and response objects.
+```javascript
+var app = express();
+
+app.use(cookieParser());
+app.use(bodyParser());
+app.use(logger());
+app.use(authentication());
+
+app.get('/', function (req, res) {
+  // ...
+});
+
+app.listen(3000);
+```
+An Express application is essentially Node.js with a host of middleware functions, whether you want to customize your own middleware or take advantage of the built-in middlewares of the framework, Express made the process natural and intuitive.
+
+**Template Engine**  
+Template engines allow developer to embed backend variables into HTML files, and when requested the template file will be rendered to plain HTML format with the variables interpolated with their actual values. By default, the express-generator uses Pug (originally known as Jade) template engine, but other options like Mustache and EJS also work with Express seamlessly.
+
+**Database Integration**  
+As a minimal framework, Express does not consider database integration as a required aspect within its package, thus it leans toward no specific database usage whatsoever. While adopting a particular data storage technology, be it MySQL, MongoDB, PostgreSQL, Redis, ElasticSearch or something else, it’s just a matter of installing the particular npm package as database driver. These third party database drivers do not conform to unified syntax when doing CRUD instructions, which makes switching databases a big hassle and error prone.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 56. ***What are the Challenges with Node.js?***
+**Challenges with Node.js Application Maintenance**  
+Improper maintenance of an application can result in issues related to stability or flexibility, often leading to the app’s failure. If the code is not well-written or if developers use outdated tools, the performance can suffer, and users might experience more bugs and app crashes. On top of that, poor-quality code can hamper the app’s scaling capacity and the further development of the application. In the worst case scenario, it might become impossible to introduce new features without rewriting the codebase from scratch. 
+
+1. Extensive stack
+2. Technical Debt
+3. Scalability challanges
+4. Poor documentation
+
+**How to Deal With Maintenance Problems**  
+1. Conduct code review
+2. Use microservices
+3. Improve code quality
+4. Test before new feature implementation
+5. Improve documentation
+6. Update the stack
+7. Dig into the roots
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 57. ***What is the difference between Node.js vs Ajax?***
+**AJAX** — AJAX stands for Asynchronous Javascript and XML, it’s used to allow web pages (client-side) to update asynchronously by communicating with a web server and by exchanging data. This essentially means that applications can talk to a server in the background of the application. It uses some core components to function:
+1. The browser’s XMLHttpRequest object to request data from a server
+1. HTML/CSS to display or collect data
+1. DOM for dynamic display
+1. JSON/XML for interchanging the data
+1. Javascript to unify everything
+
+**Node.js** — Node.js allows the developers to develop a web application in a single language called JavaScript for both client side and server side.
+
+Unlike the other programming languages, Node.js has its cycle of the event in the form of language which is very beneficial for high-performance and scalable application development.
+
+It is required for those web applications where traffic rate is very high. Node.js is an event based I/O language and its response time is very high rather than the other traditional languages. It is being used by the famous websites like Linked in, Twitter and Gmail.
+
+The runtime environment of Node.js interprets JavaScript, which is very easy and simple to understand and code. Due to this reason, even the developers find it easy going which keeps them happy and relaxed. It is pertinent for real-time collaborative apps.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 59. ***Mention the steps by which you can async in Node.js?***
+ES 2017 introduced Asynchronous functions. Async functions are essentially a cleaner way to work with asynchronous code in JavaScript. 
+
+**Async/Await**  
+* The newest way to write asynchronous code in JavaScript.
+* It is non blocking (just like promises and callbacks).
+* Async/Await was created to simplify the process of working with and writing chained promises.
+* Async functions return a Promise. If the function throws an error, the Promise will be rejected. If the function returns a value, the Promise will be resolved.  
+
+Syntax  
+```javascript
+// Normal Function
+function add(x,y){
+  return x + y;
+}
+// Async Function
+async function add(x,y){
+  return x + y;
+}
+```
+**Await**   
+Async functions can make use of the await expression. This will pause the async function and wait for the Promise to resolve prior to moving on.  
+
+Example  
+```javascript
+function doubleAfter2Seconds(x) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(x * 2);
+    }, 2000);
+  });
+}
+
+async function addAsync(x) {
+  const a = await doubleAfter2Seconds(10);
+  const b = await doubleAfter2Seconds(20);
+  const c = await doubleAfter2Seconds(30);
+  return x + a + b + c;
+}
+
+addAsync(10).then((sum) => {
+  console.log(sum);
+});
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 60. ***What are the timing features of Node.js?***
+The Performance Timing API provides an implementation of the W3C Performance Timeline specification. The purpose of the API is to support collection of high resolution performance metrics. This is the same Performance API as implemented in modern Web browsers.
+```javascript
+const { PerformanceObserver, performance } = require('perf_hooks');
+
+const obs = new PerformanceObserver((items) => {
+  console.log(items.getEntries()[0].duration);
+  performance.clearMarks();
+});
+obs.observe({ entryTypes: ['measure'] });
+
+performance.mark('A');
+doSomeLongRunningProcess(() => {
+  performance.mark('B');
+  performance.measure('A to B', 'A', 'B');
+});
+``` 
+**`request` module**  
+The popular request module has a built-in method to measure HTTP timings. You can enable it with the time property.
+```javascript
+const request = require('request')
+
+request({
+  uri: 'https://nodejs.org',
+  method: 'GET',
+  time: true
+}, (err, resp) => {
+  console.log(err || resp.timings)
+})
 ```
 
 <div align="right">
