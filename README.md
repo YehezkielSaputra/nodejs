@@ -1621,7 +1621,7 @@ Node.js works asynchronously by using the event loop and callback functions, to 
 While processing a request, Node.js attaches a callback function to it and moves it to the back-end. Now, whenever its response is ready, an event is called which triggers the associated callback function to send this response.
 
 <div align="right">
-    <b><a href="#">↥ back to top</a></b>
+    <b><a href="#">back to top</a></b>
 </div>
 
 #### 48. ***Is Node.js entirely based on a single-thread?***
@@ -1632,7 +1632,7 @@ Moreover, Node.js has an optimized design which utilizes both JavaScript and C++
 To explain it practically, let’s assume there are 100s of requests lined up in Node.js queue. As per design, the main thread of Node.js event loop will receive all of them and forwards to background workers for execution. Once the workers finish processing requests, the registered callbacks get notified on event loop thread to pass the result back to the user.
 
 <div align="right">
-    <b><a href="#">↥ back to top</a></b>
+    <b><a href="#">back to top</a></b>
 </div>
 
 #### 49. ***How to make post request in Node.js?***
@@ -1648,7 +1648,7 @@ var request = require('request');
 ```
 
 <div align="right">
-    <b><a href="#">↥ back to top</a></b>
+    <b><a href="#">back to top</a></b>
 </div>
 
 #### 50. ***Can you create http server in Node.js?***
