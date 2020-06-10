@@ -44,6 +44,16 @@
 | 38. |[What does emitter do and what is dispatcher?](#38-what-does-emitter-do-and-what-is-dispatcher)|
 | 39. |[How to kill child processes that spawn their own child processes in Node.js?](#39-how-to-kill-child-processes-that-spawn-their-own-child-processes-in-nodejs)|
 | 40. |[What do you understand by Reactor Pattern in Node.js?](#40-what-do-you-understand-by-reactor-pattern-in-nodejs)|
+| 41. |[What are the key features of Node.js?](#41-what-are-the-key-features-of-nodejs)|
+| 42. |[What are globals in Node.js?](#42-what-are-globals-in-nodejs)|
+| 43. |[What is chaining process in Node.js?](#43-what-is-chaining-process-in-nodejs)|
+| 44. |[What is a control flow function?](#44-what-is-a-control-flow-function)|
+| 45. |[What is npm in Node.js?](#45-what-is-npm-in-nodejs)|
+| 46. |[When to use Node.js and when not to use it?](#46-when-to-use-nodejs-and-when-not-to-use-it)|
+| 47. |[Explain how does Node.js work?](#47-explain-how-does-nodejs-work)|
+| 48. |[Is Node.js entirely based on a single-thread?](#48-is-nodejs-entirely-based-on-a-single-thread)|
+| 49. |[How to make post request in Node.js?](#49-how-to-make-post-request-in-nodejs)|
+| 50. |[Can you create http server in Node.js?](#50-can-you-create-http-server-in-nodejs)|
 
 #### 01. ***What is Node.js?***
 Node.js is an open-source server side runtime environment built on Chrome's V8 JavaScript engine. It provides an event driven, non-blocking (asynchronous) I/O and cross-platform runtime environment for building highly scalable server-side applications using JavaScript. 
@@ -1477,3 +1487,184 @@ When all the items in the Event Queue are processed and there are no pending ope
 <div align="right">
     <b><a href="#">back to top</a></b>
 </div>
+
+#### 41. ***What are the key features of Node.js?***
+* **Asynchronous event driven IO helps concurrent request handling** – All APIs of Node.js are asynchronous. This feature means that if a Node receives a request for some Input/Output operation, it will execute that operation in the background and continue with the processing of other requests. Thus it will not wait for the response from the previous requests.
+* **Fast in Code execution** – Node.js uses the V8 JavaScript Runtime engine, the one which is used by Google Chrome. Node has a wrapper over the JavaScript engine which makes the runtime engine much faster and hence processing of requests within Node.js also become faster.
+* **Single Threaded but Highly Scalable** – Node.js uses a single thread model for event looping. The response from these events may or may not reach the server immediately. However, this does not block other operations. Thus making Node.js highly scalable. Traditional servers create limited threads to handle requests while Node.js creates a single thread that provides service to much larger numbers of such requests.
+* **Node.js library uses JavaScript** – This is another important aspect of Node.js from the developer’s point of view. The majority of developers are already well-versed in JavaScript. Hence, development in Node.js becomes easier for a developer who knows JavaScript.
+* **There is an Active and vibrant community for the Node.js framework** – The active community always keeps the framework updated with the latest trends in the web development.
+* **No Buffering** – Node.js applications never buffer any data. They simply output the data in chunks.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 42. ***What are globals in Node.js?***
+There are three keywords in Node.js which constitute as Globals. These are Global, Process, and Buffer.
+
+* **Global**  
+The Global keyword represents the global namespace object. It acts as a container for all other <global> objects. If we type `console.log(global)`, it will print out all of them.
+
+An important point to note about the global objects is that not all of them are in the global scope, some of them fall in the module scope. So, it’s wise to declare them without using the var keyword or add them to Global object.
+
+Variables declared using the var keyword become local to the module whereas those declared without it get subscribed to the global object.
+
+* **Process**  
+It is also one of the global objects but includes additional functionality to turn a synchronous function into an async callback. There is no boundation to access it from anywhere in the code. It is the instance of the EventEmitter class. And each node application object is an instance of the Process object.
+
+It primarily gives back the information about the application or the environment.
+```
+<process.execPath> – to get the execution path of the Node app.
+<process.Version> – to get the Node version currently running.
+<process.platform> – to get the server platform.
+```
+Some of the other useful Process methods are as follows.
+```
+<process.memoryUsage> – To know the memory used by Node application.
+<process.NextTick> – To attach a callback function that will get called during the next loop. It can cause a delay in executing a function.
+```
+
+* **Buffer**  
+The Buffer is a class in Node.js to handle binary data. It is similar to a list of integers but stores as a raw memory outside the V8 heap.
+
+We can convert JavaScript string objects into Buffers. But it requires mentioning the encoding type explicitly.
+```
+<ascii> – Specifies 7-bit ASCII data.
+<utf8> – Represents multibyte encoded Unicode char set.
+<utf16le> – Indicates 2 or 4 bytes, little endian encoded Unicode chars.
+<base64> – Used for Base64 string encoding.
+<hex> – Encodes each byte as two hexadecimal chars.
+```
+Here is the syntax to use the Buffer class.
+```javascript
+var buffer = new Buffer(string, [encoding]);
+```
+The above command will allocate a new buffer holding the string with <utf8> as the default encoding. However, if you like to write a <string> to an existing buffer object, then use the following line of code.
+```javascript
+buffer.write(string)
+```
+This class also offers other methods like <readInt8> and <writeUInt8> that allows read/write from various types of data to the buffer.
+	
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 43. ***What is chaining process in Node.js?***
+It’s an approach to connect the output of one stream to the input of another stream, thus creating a chain of multiple stream operations.
+	
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 44. ***What is a control flow function?***
+It is a generic piece of code which runs in between several asynchronous function calls is known as control flow function.
+
+It executes the following steps.
+
+* Control the order of execution.
+* Collect data.
+* Limit concurrency.
+* Call the next step in the program.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 45. ***What is npm in Node.js?***
+NPM stands for Node Package Manager. It provides following two main functionalities.
+
+* It works as an Online repository for node.js packages/modules which are present at <nodejs.org>.
+* It works as Command line utility to install packages, do version management and dependency management of Node.js packages.
+NPM comes bundled along with Node.js installable. We can verify its version using the following command-
+```javascript
+$ npm --version
+```
+NPM helps to install any Node.js module using the following command.
+```javascript
+$ npm install <Module Name>
+```
+For example, following is the command to install a famous Node.js web framework module called express-
+```javascript
+$ npm install express
+```
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 46. ***When to use Node.js and when not to use it?***
+**When to use Node.js**  
+It’s ideal to use Node.js for developing streaming or event-based real-time applications that require less CPU usage such as.
+
+* Chat applications.
+* Game servers -- Node.js is good for fast and high-performance servers, that face the need to handle thousands of user requests simultaneously.
+* Good For A Collaborative Environment -- It is suitable for environments where multiple people work together. For example, they post their documents, modify them by doing check-out and check-in of these documents. Node.js supports such situations by creating an event loop for every change made to the document. The “Event loop” feature of Node.js enables it to handle multiple events simultaneously without getting blocked.
+* Advertisement Servers -- Here again, we have servers that handle thousands of request for downloading advertisements from a central host. And Node.js is an ideal solution to handle such tasks.
+* Streaming Servers -- Another ideal scenario to use Node.js is for multimedia streaming servers where clients fire request’s towards the server to download different multimedia contents from it.
+
+To summarize, it’s good to use Node.js, when you need high levels of concurrency but less amount of dedicated CPU time.
+
+Last but not the least, since Node.js uses JavaScript internally, so it fits best for building client-side applications that also use JavaScript.
+
+**When to not use Node.js**  
+However, we can use Node.js for a variety of applications. But it is a single threaded framework, so we should not use it for cases where the application requires long processing time. If the server is doing some calculation, it won’t be able to process any other requests. Hence, Node.js is best when processing needs less dedicated CPU time.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 47. ***Explain how does Node.js work?***
+A Node.js application creates a single thread on its invocation. Whenever Node.js receives a request, it first completes its processing before moving on to the next request.
+
+Node.js works asynchronously by using the event loop and callback functions, to handle multiple requests coming in parallel. An Event Loop is a functionality which handles and processes all your external events and just converts them to a callback function. It invokes all the event handlers at a proper time. Thus, lots of work is done on the back-end, while processing a single request, so that the new incoming request doesn’t have to wait if the processing is not complete.
+
+While processing a request, Node.js attaches a callback function to it and moves it to the back-end. Now, whenever its response is ready, an event is called which triggers the associated callback function to send this response.
+
+<div align="right">
+    <b><a href="#">↥ back to top</a></b>
+</div>
+
+#### 48. ***Is Node.js entirely based on a single-thread?***
+Yes, it’s true that Node.js processes all requests on a single thread. But it’s just a part of the theory behind Node.js design. In fact, more than the single thread mechanism, it makes use of events and callbacks to handle a large no. of requests asynchronously.
+
+Moreover, Node.js has an optimized design which utilizes both JavaScript and C++ to guarantee maximum performance. JavaScript executes at the server-side by Google Chrome v8 engine. And the C++ lib UV library takes care of the non-sequential I/O via background workers.
+
+To explain it practically, let’s assume there are 100s of requests lined up in Node.js queue. As per design, the main thread of Node.js event loop will receive all of them and forwards to background workers for execution. Once the workers finish processing requests, the registered callbacks get notified on event loop thread to pass the result back to the user.
+
+<div align="right">
+    <b><a href="#">↥ back to top</a></b>
+</div>
+
+#### 49. ***How to make post request in Node.js?***
+Following code snippet can be used to make a Post Request in Node.js.
+```javascript
+var request = require('request');
+    request.post('http://www.example.com/action', { form: { key: 'value' } },
+    function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            console.log(body)
+        }
+    });
+```
+
+<div align="right">
+    <b><a href="#">↥ back to top</a></b>
+</div>
+
+#### 50. ***Can you create http server in Node.js?***
+Yes, we can create HTTP Server in Node.js. We can use the <http-server> command to do so.
+
+Following is the sample code.
+```javascript
+var http = require('http');
+var requestListener = function (request, response) {
+    response.writeHead(200, {'Content-Type': 'text/plain'});
+    response.end('Welcome Viewers\n');
+}
+var server = http.createServer(requestListener);
+server.listen(4200); // The port where you want to start with.
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>X
