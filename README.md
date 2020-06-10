@@ -1829,7 +1829,7 @@ The runtime environment of Node.js interprets JavaScript, which is very easy and
     <b><a href="#">back to top</a></b>
 </div>
 
-#### 59. ***Mention the steps by which you can async in Node.js?***
+#### 58. ***Mention the steps by which you can async in Node.js?***
 ES 2017 introduced Asynchronous functions. Async functions are essentially a cleaner way to work with asynchronous code in JavaScript. 
 
 **Async/Await**  
@@ -1878,7 +1878,7 @@ addAsync(10).then((sum) => {
     <b><a href="#">back to top</a></b>
 </div>
 
-#### 60. ***What are the timing features of Node.js?***
+#### 59. ***What are the timing features of Node.js?***
 The Performance Timing API provides an implementation of the W3C Performance Timeline specification. The purpose of the API is to support collection of high resolution performance metrics. This is the same Performance API as implemented in modern Web browsers.
 ```javascript
 const { PerformanceObserver, performance } = require('perf_hooks');
@@ -1908,6 +1908,59 @@ request({
   console.log(err || resp.timings)
 })
 ```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 60. ***What is LTS releases of Node.js why should you care?***
+An LTS(Long Term Support) version of Node.js receives all the critical bug fixes, security updates and performance
+
+LTS versions of Node.js are supported for at least 18 months and are indicated by even version numbers (e.g. 4, 6, 8). They’re best for production since the LTS release line is focussed on stability and security, whereas the Current release line has a shorter lifespan and more frequent updates to the code. Changes to LTS versions are limited to bug fixes for stability, security updates, possible npm updates, documentation updates and certain performance improvements that can be demonstrated to not break existing applications.
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 61. ***Why should you separate Express app and server?***
+Keeping the API declaration separated from the network related configuration (port, protocol, etc) allows testing the API in-process, without performing network calls, with all the benefits that it brings to the table: fast testing execution and getting coverage metrics of the code. It also allows deploying the same API under flexible and different network conditions. Bonus: better separation of concerns and cleaner code.
+
+API declaration, should reside in app.js:
+```javascript
+var app = express();
+app.use(bodyParser.json());
+app.use("/api/events", events.API);
+app.use("/api/forms", forms);
+```
+Server network declaration, should reside in /bin/www:
+```javascript
+var app = require('../app');
+var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+```
+
+<div align="right">
+    <b><a href="#">back to top</a></b>
+</div>
+
+#### 62. ***What is difference between JavaScript and Node.js?***
+|BASIS Of Comparison Between JavaScript vs Node JS	|JavaScript	|Node JS    |
+|---------------------------------------------------|-----------|-----------|
+Type	|JavaScript is a programming language. It running in any web browser with a proper browser engine.|	It is an interpreter and environment for JavaScript with some specific useful libraries which JavaScript programming can use separately.|
+|Utility	|Mainly using for any client-side activity for a web application, like possible attribute validation or refreshing the page in a specific interval or provide some dynamic changes in web pages without refreshing the page.|	It mainly used for accessing or performing any non-blocking operation of any operating system, like creating or executing a shell script or accessing any hardware specific information or running any backend job.|
+|Running Engine| JavaScript running any engine like Spider monkey (FireFox), JavaScript Core (Safari), V8 (Google Chrome).|	Node JS only run in a V8 engine which mainly used by google chrome. And javascript program which will be written under this Node JS will be always run in V8 Engine.|
 
 <div align="right">
     <b><a href="#">back to top</a></b>
